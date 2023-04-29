@@ -38,7 +38,7 @@ Datum split_pair(PG_FUNCTION_ARGS) {
             values[0] = CStringGetTextDatum(key);
             values[1] = CStringGetTextDatum(val);
             // construct the tuple from its TEXT parts
-            tuple = head_form_tuple(tupdesc, values, nulls);
+            tuple = heap_form_tuple(tupdesc, values, nulls);
             PG_RETURN_DATUM(HeapTupleGetDatum(tuple));
         }
         PG_RETURN_NULL();
