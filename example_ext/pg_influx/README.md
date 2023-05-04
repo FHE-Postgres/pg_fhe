@@ -9,4 +9,4 @@
 ```sudo make install```
 
 ## Installing and Running
-
+![Example](./images/psql_ext.png)
