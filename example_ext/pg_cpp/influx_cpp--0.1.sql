@@ -3,4 +3,4 @@
 CREATE TYPE item_cpp AS (key text, value text);
 
 CREATE FUNCTION split_pair_cpp(text)
-RETURNS item LANGUAGE C AS 'MODULE_PATHNAME';
+RETURNS item_cpp LANGUAGE C AS 'MODULE_PATHNAME';
