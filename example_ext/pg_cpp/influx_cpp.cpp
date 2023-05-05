@@ -1,6 +1,8 @@
+// Declare c++ libraries here
 #include <openssl/sha.h>
 
 extern "C" {
+    // Declare C libraries here
     #include <postgres.h>
     #include <fmgr.h>
     #include <funcapi.h>
@@ -10,8 +12,8 @@ extern "C" {
 
     PG_MODULE_MAGIC; // Macro for info on Postgres Version
    
+    // Takes text, splits by '=' to make key and value columns	
     PG_FUNCTION_INFO_V1(split_pair_cpp);
-    PG_FUNCTION_INFO_V1(influx_sha);
 
     Datum split_pair_cpp(PG_FUNCTION_ARGS) {
         TupleDesc tupdesc;
@@ -42,16 +44,19 @@ extern "C" {
             PG_RETURN_NULL();
     }       
 
-    Datum influx_sha(PG_FUNCTION_ARGS) {
-	unsigned char *ptext; // plaintext input
-	unsigned char ctext[SHA256_DIGEST_LENGTH + 1]; // ciphertext (hashed) output
+    // takes text and returns the SHA256 digest as text
+    PG_FUNCTION_INFO_V1(influx_sha);
 
-	ptext = (unsigned char *) text_to_cstring(PG_GETARG_TEXT_PP(0));
-	// Digest length + \0
+    Datum influx_sha(PG_FUNCTION_ARGS) {
+    char *ptext; // plaintext input
+    char ctext[SHA256_DIGEST_LENGTH + 1]; // ciphertext (hashed) output
+
+	ptext = text_to_cstring(PG_GETARG_TEXT_PP(0));
 	
-	SHA256(ptext, strlen((const char*)ptext), ctext);
+	SHA256((unsigned char*) ptext, strlen(ptext), (unsigned char*) ctext);
 	ctext[SHA256_DIGEST_LENGTH] = '\0';
-	
-	PG_RETURN_TEXT_P(cstring_to_text((const char*)&ctext[SHA256_DIGEST_LENGTH + 1]));
+    
+    // return pointer to ciphertext
+	PG_RETURN_TEXT_P(cstring_to_text(&ctext[0]));
     }
 } 

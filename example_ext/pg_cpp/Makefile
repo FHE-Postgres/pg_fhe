@@ -12,3 +12,4 @@ include $(PGXS)
 clean:
 	rm -f *.o
 	rm -f *.bc
+	rm -f *.so

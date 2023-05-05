@@ -9,4 +9,4 @@ RETURNS item_cpp LANGUAGE C AS 'MODULE_PATHNAME';
 \echo "Lets try to make a function which takes some text and outputs the SHA256 hash" \quit
 
 CREATE FUNCTION influx_sha(text)
-RETURNS text LANGUAGE SQL;
+RETURNS text LANGUAGE C AS 'MODULE_PATHNAME';
