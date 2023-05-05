@@ -50,14 +50,13 @@ extern "C" {
     PG_FUNCTION_INFO_V1(influx_sha);
 
     Datum influx_sha(PG_FUNCTION_ARGS) {
-    char *ptext; // plaintext input
-    char ctext[SHA256_DIGEST_LENGTH]; // ciphertext (hashed) output
+    unsigned char *ptext; // plaintext input
+    unsigned char ctext[SHA256_DIGEST_LENGTH]; // ciphertext (hashed) output
     char ctext_str[SHA256_DIGEST_LENGTH * 2];
 
     // should be \0 terminated... i think
-	ptext = text_to_cstring(PG_GETARG_TEXT_PP(0));
-	
-	SHA256((unsigned char*) ptext, strlen(ptext), (unsigned char*) ctext);
+	ptext = (unsigned char *) text_to_cstring(PG_GETARG_TEXT_PP(0));
+	SHA256(ptext, strlen((const char *)ptext), ctext);
     
     // convert to readable str
     for (int i = 0; i < SHA256_DIGEST_LENGTH; i++){
