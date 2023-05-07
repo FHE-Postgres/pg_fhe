@@ -1,3 +1,0 @@
-/home/dom/Projects/FHE-Extension/pg-fhe/build/CMakeFiles/pg-fhe.dir
-/home/dom/Projects/FHE-Extension/pg-fhe/build/CMakeFiles/edit_cache.dir
-/home/dom/Projects/FHE-Extension/pg-fhe/build/CMakeFiles/rebuild_cache.dir
