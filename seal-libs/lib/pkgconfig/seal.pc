@@ -1,0 +1,18 @@
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT license.
+
+prefix=/home/mdt/Documents/School/CS/578/FHE-Extension/seal-libs
+libdir=${prefix}/lib
+includedir=${prefix}/include/SEAL-4.1
+
+Name: Microsoft SEAL
+Version: 4.1.1
+Description: An easy-to-use homomorphic encryption library
+
+Requires: 
+Requires: 
+Requires: 
+Requires: 
+
+Libs: -L${libdir} -lseal-4.1
+Cflags: -std=c++17 -I${includedir}
