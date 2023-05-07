@@ -1,8 +1,9 @@
 import psycopg2
 
 insert_id = input("id: ")
+ctext_file = input("ciphertext file: ")
 # Read the binary file
-with open("ciphertext.bin", "rb") as file:
+with open(f"{ctext_file}", "rb") as file:
     binary_data = file.read()
 
 # Connect to the PostgreSQL database

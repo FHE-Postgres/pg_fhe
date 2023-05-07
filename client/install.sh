@@ -4,6 +4,6 @@ mkdir build
 cd build
 cmake ..
 make
-mv encrypt decrypt ..
+mv encrypt decrypt .. 
 cd ..
 rm -rf build
