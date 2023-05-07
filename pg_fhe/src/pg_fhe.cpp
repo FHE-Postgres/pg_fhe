@@ -15,8 +15,8 @@ extern "C" {
 
     PG_MODULE_MAGIC; // Macro for info on Postgres Version
 
-    PG_FUNCTION_INFO_V1(ckks_square);
-    Datum ckks_square(PG_FUNCTION_ARGS) {
+    PG_FUNCTION_INFO_V1(ckks_mult);
+    Datum ckks_mult(PG_FUNCTION_ARGS) {
         
         /* Set encryption params */
         EncryptionParameters params(scheme_type::ckks); 
@@ -26,6 +26,8 @@ extern "C" {
         SEALContext context(params);
         Evaluator evaluator(context); 
 
+        double scale = pow(2.0, 30);
+        CKKSEncoder encoder(context);
         // Get bytea and put in stringstream
         stringstream data_stream;
         bytea *input;
@@ -42,17 +44,19 @@ extern "C" {
         rlk.load(context, data_stream);
         encrypted.load(context, data_stream);
 
-        // Compute Square
-        Ciphertext encrypted_square;
-        evaluator.multiply(encrypted, encrypted, encrypted_square);
+        // Compute ciphertext * 2.0
+        Ciphertext encrypted_mult;
+        Plaintext coeff;
+        encoder.encode(2.0, scale, coeff); 
+        evaluator.multiply_plain(encrypted, coeff, encrypted_mult);
 
         // Relinearize and Rescale
-        evaluator.relinearize_inplace(encrypted_square, rlk);
-        evaluator.rescale_to_next_inplace(encrypted_square);
+        evaluator.relinearize_inplace(encrypted_mult, rlk);
+        evaluator.rescale_to_next_inplace(encrypted_mult);
 
         // Save Result
         stringstream output_stream;
-        auto size_out = encrypted_square.save(output_stream);
+        auto size_out = encrypted_mult.save(output_stream);
         string tmp = output_stream.str();
         const char* ctmp = tmp.c_str();
         size_t len = tmp.length();
