@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/fhe_client.dir/src/fhe_client.cpp.o -o fhe_client  /usr/local/lib/libseal-4.1.a 

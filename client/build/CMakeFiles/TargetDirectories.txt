@@ -1,3 +1,0 @@
-/home/dom/Projects/FHE-Extension/client/build/CMakeFiles/fhe_client.dir
-/home/dom/Projects/FHE-Extension/client/build/CMakeFiles/edit_cache.dir
-/home/dom/Projects/FHE-Extension/client/build/CMakeFiles/rebuild_cache.dir
