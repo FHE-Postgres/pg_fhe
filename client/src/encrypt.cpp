@@ -43,7 +43,7 @@ int main() {
     stringstream data_stream;
     // Relinearization Keys
     Serializable<RelinKeys> rlk = keygen.create_relin_keys();
-    // auto size_rlk = rlk.save(data_stream);
+    auto size_rlk = rlk.save(data_stream);
 
     // Encrypt
     double scale = pow(2.0, 30);

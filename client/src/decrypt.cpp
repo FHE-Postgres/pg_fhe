@@ -53,6 +53,9 @@ int main() {
 
     // get ciphertext
     Ciphertext encrypted_result;
+    // TESTING remove rlk keys
+    RelinKeys rlk;
+    rlk.load(context, data_stream);
     encrypted_result.load(context, data_stream);
 
     // load plaintext
