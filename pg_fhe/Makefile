@@ -8,3 +8,8 @@ MODULES = fhe
 PG_CONFIG = pg_config
 PGXS := $(shell $(PG_CONFIG) --pgxs)
 include $(PGXS)
+
+clean:
+	rm -f *.o
+	rm -f *.bc
+	rm -f *.so
