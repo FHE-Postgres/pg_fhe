@@ -1,5 +1,7 @@
 // Declare c++ libraries here
-#include "seal/seal.h"
+#include "examples.h"
+#include <sstream>
+#include <string>
 
 using namespace std;
 using namespace seal;
@@ -13,18 +15,51 @@ extern "C" {
 
     PG_MODULE_MAGIC; // Macro for info on Postgres Version
 
-    PG_FUNCTION_INFO_V1(bfv_add_one);
-    Datum bfv_add_one(PG_FUNCTION_ARGS) {
+    PG_FUNCTION_INFO_V1(ckks_square);
+    Datum ckks_square(PG_FUNCTION_ARGS) {
         
         /* Set encryption params */
-        EncryptionParameters params(scheme_type::bfv);
-        size_t poly_modulus_degree = 4096;
+        EncryptionParameters params(scheme_type::ckks); 
+        size_t poly_modulus_degree = 8192;
         params.set_poly_modulus_degree(poly_modulus_degree);
-        params.set_coeff_modulus(CoeffModulus::BFVDefault(poly_modulus_degree));
-        params.set_plain_modulus(1024);
+        params.set_coeff_modulus(CoeffModulus::Create(poly_modulus_degree, {50, 30, 50}));
         SEALContext context(params);
-        
-        // TODO unimplemented
-        PG_RETURN_NULL();
+        Evaluator evaluator(context); 
+
+        // Get bytea and put in stringstream
+        stringstream data_stream;
+        bytea *input;
+
+        input = PG_GETARG_BYTEA_PP(0); 
+        size_t input_size = VARSIZE(input) - VARHDRSZ;
+        char * input_data = (char *) VARDATA(input);
+
+        data_stream.write(input_data, input_size);
+
+        // Load relinearization keys and ciphertext
+        RelinKeys rlk;
+        Ciphertext encrypted;
+        rlk.load(context, data_stream);
+        encrypted.load(context, data_stream);
+
+        // Compute Square
+        Ciphertext encrypted_square;
+        evaluator.multiply(encrypted, encrypted, encrypted_square);
+
+        // Relinearize and Rescale
+        evaluator.relinearize_inplace(encrypted_square, rlk);
+        evaluator.rescale_to_next_inplace(encrypted_square);
+
+        // Save Result
+        stringstream output_stream;
+        auto size_out = encrypted_square.save(output_stream);
+        string tmp = output_stream.str();
+        const char* ctmp = tmp.c_str();
+        size_t len = tmp.length();
+
+        bytea * result = (bytea *) palloc(VARHDRSZ + len);
+        SET_VARSIZE(result, VARHDRSZ + len);
+        memcpy(VARDATA(result), ctmp, len);
+        PG_RETURN_BYTEA_P(result);
     }
 } 
