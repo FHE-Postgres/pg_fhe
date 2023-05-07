@@ -10,6 +10,7 @@ using namespace seal;
 int main(int argc, char** argv) {
     
     float input = stof(argv[1]);
+    string filename = argv[2];
 
     // Create encryption params and keys
     EncryptionParameters params(scheme_type::ckks); 
@@ -60,7 +61,6 @@ int main(int argc, char** argv) {
 
     // save datastream to file
     // Now, save the stringstream to a file
-    string filename = "ciphertext.bin";
     ofstream output_file(filename, ios::binary);
 
     if (output_file.is_open()) {

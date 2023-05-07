@@ -6,9 +6,9 @@
 using namespace std;
 using namespace seal;
 
-int main() {
+int main(int argc, char** argv) {
     // load ciphertext from file
-    string filename = "ciphertext.bin";
+    string filename = argv[1]; 
     
     ifstream input_file(filename, ios::binary);
     stringstream data_stream;
@@ -54,8 +54,8 @@ int main() {
     // get ciphertext
     Ciphertext encrypted_result;
     // TESTING remove rlk keys
-    RelinKeys rlk;
-    rlk.load(context, data_stream);
+    // RelinKeys rlk;
+    // rlk.load(context, data_stream);
     encrypted_result.load(context, data_stream);
 
     // load plaintext
