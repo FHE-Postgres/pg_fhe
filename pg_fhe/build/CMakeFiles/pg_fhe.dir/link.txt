@@ -1,1 +1,0 @@
-/usr/bin/c++ -fPIC -shared  -o pg_fhe.so CMakeFiles/pg_fhe.dir/src/pg_fhe.cpp.o  /usr/lib/libpq.so /usr/local/lib/libseal-4.1.a 
