@@ -1,4 +1,7 @@
 #include "examples.h"
+#include <iostream>
+#include <sstream>
+#include <fstream>
 
 using namespace std;
 using namespace seal;
@@ -36,7 +39,20 @@ int main() {
     auto size_encrypted = encryptor.encrypt_symmetric(plain2).save(data_stream);
 
     // save datastream to file
-    // TODO
+    // Now, save the stringstream to a file
+    string filename = "ciphertext.bin";
+    ofstream output_file(filename, ios::binary);
+
+    if (output_file.is_open()) {
+        // Copy the stringstream content to the file
+        output_file << data_stream.rdbuf();
+        output_file.close();
+
+        cout << "Binary data saved to: " << filename << endl;
+    } else {
+        cerr << "Unable to open file for writing." << endl;
+        return 1;
+    }
 
     return 0;
 }
