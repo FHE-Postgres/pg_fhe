@@ -2,11 +2,15 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <string>
 
 using namespace std;
 using namespace seal;
 
-int main() {
+int main(int argc, char** argv) {
+    
+    float input = stof(argv[1]);
+
     // Create encryption params and keys
     EncryptionParameters params(scheme_type::ckks); 
     size_t poly_modulus_degree = 8192;
@@ -49,7 +53,7 @@ int main() {
     double scale = pow(2.0, 30);
     CKKSEncoder encoder(context);
     Plaintext plain;
-    encoder.encode(4.5, scale, plain);
+    encoder.encode(input, scale, plain);
     Encryptor encryptor(context, pk);
     encryptor.set_secret_key(sk); // set to secret key mode for size optimization
     auto size_encrypted = encryptor.encrypt_symmetric(plain).save(data_stream);
