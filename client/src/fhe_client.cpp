@@ -31,12 +31,11 @@ int main() {
     // Encrypt
     double scale = pow(2.0, 30);
     CKKSEncoder encoder(context);
-    Plaintext plain1, plain2;
-    encoder.encode(2.3, scale, plain1);
-    encoder.encode(4.5, scale, plain2);
+    Plaintext plain;
+    encoder.encode(4.5, scale, plain);
     Encryptor encryptor(context, pk);
     encryptor.set_secret_key(sk); // set to secret key mode for size optimization
-    auto size_encrypted = encryptor.encrypt_symmetric(plain2).save(data_stream);
+    auto size_encrypted = encryptor.encrypt_symmetric(plain).save(data_stream);
 
     // save datastream to file
     // Now, save the stringstream to a file
