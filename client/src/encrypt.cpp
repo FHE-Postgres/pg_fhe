@@ -17,16 +17,33 @@ int main() {
     print_parameters(context);
     cout << endl;
     */
+    stringstream sk_stream;
+
     KeyGenerator keygen(context);
     auto sk = keygen.secret_key();
     PublicKey pk;
     keygen.create_public_key(pk);
-    
-    stringstream data_stream;
 
+    sk.save(sk_stream);
+    
+    string keyfile = "sk.bin";
+    ofstream key_file(keyfile, ios::binary);
+
+    if (key_file.is_open()) {
+        // Copy the stringstream content to the file
+        key_file << sk_stream.rdbuf();
+        key_file.close();
+
+        cout << "Secret Key data saved to: " << keyfile << endl;
+    } else {
+        cerr << "Unable to open file for writing." << endl;
+        return 1;
+    }
+
+    stringstream data_stream;
     // Relinearization Keys
     Serializable<RelinKeys> rlk = keygen.create_relin_keys();
-    auto size_rlk = rlk.save(data_stream);
+    // auto size_rlk = rlk.save(data_stream);
 
     // Encrypt
     double scale = pow(2.0, 30);

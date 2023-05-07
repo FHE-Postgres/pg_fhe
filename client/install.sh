@@ -4,6 +4,6 @@ mkdir build
 cd build
 cmake ..
 make
-mv fhe_client ..
+mv encrypt decrypt ..
 cd ..
 rm -rf build
