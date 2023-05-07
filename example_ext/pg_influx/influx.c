@@ -20,26 +20,26 @@ Datum split_pair(PG_FUNCTION_ARGS) {
         ereport(ERROR, (errcode(ERRCODE_FEATURE_NOT_SUPPORTED),
         errmsg("function returning record called in context" "that cannot accept type record")));
 
-        // get first arg to the function (index 0)
-        // the arg is a TEXT type
-        // no need to free any memory, handled for you
-        key = text_to_cstring(PG_GETARG_TEXT_PP(0));
-        val = strchr(key, '=');
-        if (val) {
-            // Datum types are used in Postgress
-            // Can contain values that can be passed by value
-            // or a pointer 
-            Datum values[2];
-            bool nulls[2] = {0};
-            HeapTuple tuple;
+    // get first arg to the function (index 0)
+    // the arg is a TEXT type
+    // no need to free any memory, handled for you
+    key = text_to_cstring(PG_GETARG_TEXT_PP(0));
+    val = strchr(key, '=');
+    if (val) {
+        // Datum types are used in Postgress
+        // Can contain values that can be passed by value
+        // or a pointer 
+        Datum values[2];
+        bool nulls[2] = {0};
+        HeapTuple tuple;
 
-            *val++ = '\0';
-            // convert our c-strings to TEXT datum type
-            values[0] = CStringGetTextDatum(key);
-            values[1] = CStringGetTextDatum(val);
-            // construct the tuple from its TEXT parts
-            tuple = heap_form_tuple(tupdesc, values, nulls);
-            PG_RETURN_DATUM(HeapTupleGetDatum(tuple));
-        }
-        PG_RETURN_NULL();
+        *val++ = '\0';
+        // convert our c-strings to TEXT datum type
+        values[0] = CStringGetTextDatum(key);
+        values[1] = CStringGetTextDatum(val);
+        // construct the tuple from its TEXT parts
+        tuple = heap_form_tuple(tupdesc, values, nulls);
+        PG_RETURN_DATUM(HeapTupleGetDatum(tuple));
+    }
+    PG_RETURN_NULL();
 }
