@@ -9,6 +9,10 @@ using namespace seal;
 int main(int argc, char** argv) {
     // load ciphertext from file
     string filename = argv[1]; 
+    // option to read or not read relinearization keys
+    // if the ciphertext was computed on, set this to 0
+    // else 1
+    int option = stoi(argv[2]);
     
     ifstream input_file(filename, ios::binary);
     stringstream data_stream;
@@ -54,8 +58,10 @@ int main(int argc, char** argv) {
     // get ciphertext
     Ciphertext encrypted_result;
     // TESTING remove rlk keys
-    // RelinKeys rlk;
-    // rlk.load(context, data_stream);
+    if (option) {
+        RelinKeys rlk;
+        rlk.load(context, data_stream);
+    }
     encrypted_result.load(context, data_stream);
 
     // load plaintext
