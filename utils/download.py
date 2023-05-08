@@ -4,14 +4,15 @@ import io
 input_id = input("id: ")
 table = input("table: ")
 column = input("column: ")
+username = input("username: ")
 # Connect to the database
-conn = psycopg2.connect(database="testdb", user="dom")
+conn = psycopg2.connect(database="testdb", user=f"{username}")
 
 # Open a cursor to perform database operations
 cur = conn.cursor()
 
 # Select one row from the table with bytea column
-cur.execute(f"SELECT {column} FROM {table} WHERE user_id={input_id};")
+cur.execute(f"SELECT {column} FROM {table} WHERE id={input_id};")
 row = cur.fetchone()
 
 # Get the bytea data from the row
