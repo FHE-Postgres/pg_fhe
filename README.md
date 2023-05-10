@@ -33,14 +33,14 @@ We provide a tool ```utils/add.py``` which will insert ciphertext binaries into 
 ![Inserting Data](./utils/screenshots/insert.png)
 
 ### Testing ckks\_mult
-Now that we have our ciphertexts in the database, we can test the pg_fhe extension. We will specifically be testing the ckks_mult() function, which takes ckks encrypted data, and multiplies the data by 2.0. So when we decrypt, we should expect the result to be our input multiplied by 2.0. 
+Now that we have our ciphertexts in the database, we can test the pg_fhe extension. We will specifically be testing the ckks_mult() function, which takes ckks encrypted data, and multiplies the data by a float parameter. We will chose our parameter as 2.0. So when we decrypt, we should expect the result to be our input multiplied by 2.0. 
 
 While this may seem to be a trivial example, it shows how we can compute on encrypted data. In the future we plan to release more complex operations. As a result of combining operations, more complex computational logic can be achieved. 
 
 To run the function we have provided a sql script, which runs the following sql code:
 ```sql
 CREATE TABLE test_ckks_mult as 
-    SELECT id, ckks_mult(data) as data FROM test;
+    SELECT id, ckks_mult(data, 2.0) as data FROM test;
 ```
 ![Testing ckksmult](./utils/screenshots/test-50.png)
 As you can see, operating on 50 rows of data, the operations took a little over 1 second, which is reasonable. Later we will benchmark the function on larger datasets, to test if the tool can scale, and the limitations of FHE.

@@ -5,3 +5,4 @@ Signifigand Size | Decimal Error
 10^6             | FAILS
 
 * In general expect 3 decimal places of accuracy
+* Total 7 digits of accuracy
