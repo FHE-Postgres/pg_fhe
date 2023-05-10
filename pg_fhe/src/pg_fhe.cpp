@@ -25,14 +25,15 @@ extern "C" {
         params.set_coeff_modulus(CoeffModulus::Create(poly_modulus_degree, {50, 30, 50}));
         SEALContext context(params);
         Evaluator evaluator(context); 
-
         double scale = pow(2.0, 30);
         CKKSEncoder encoder(context);
+
         // Get bytea and put in stringstream
         stringstream data_stream;
         bytea *input;
-
+        float8 factor;
         input = PG_GETARG_BYTEA_PP(0); 
+        factor = PG_GETARG_FLOAT8(1);
         size_t input_size = VARSIZE(input) - VARHDRSZ;
         char * input_data = (char *) VARDATA(input);
 
@@ -47,7 +48,7 @@ extern "C" {
         // Compute ciphertext * 2.0
         Ciphertext encrypted_mult;
         Plaintext coeff;
-        encoder.encode(2.0, scale, coeff); 
+        encoder.encode(factor, scale, coeff); 
         evaluator.multiply_plain(encrypted, coeff, encrypted_mult);
 
         // Relinearize and Rescale
