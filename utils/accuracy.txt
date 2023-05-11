@@ -1,0 +1,8 @@
+Signifigand Size | Decimal Error
+10^3             | NONE
+10^4             | .001-.002
+10^5             | .010-.040
+10^6             | FAILS
+
+* In general expect 3 decimal places of accuracy
+* Total 7 digits of accuracy
